@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XML String Replacement</title>
+</head>
+<body>
+    <textarea id="inputXml" rows="20" cols="100">
+<sysinfo type="smbios">
+    <bios>
+      <entry name="vendor">ASUS</entry>
+      <entry name="version">8.00</entry>
+    </bios>
+    <system>
+      <entry name="manufacturer">ASUS</entry>
+      <entry name="product">SuckEACFxxK</entry>要改
+      <entry name="version">8.00</entry>
+      <entry name="serial">9KS7AIEL6</entry>要改
+      <entry name="family">HKCUW-z3x1vZtXr-PPLZ</entry>要改
+    </system>
+    <baseBoard>
+      <entry name="manufacturer">HKCUW-VpTnRlPjN-PPLZ</entry>要改
+      <entry name="product">ROG STRIX B660-A GAMING WIFI</entry>
+      <entry name="version">HKCUW-hLfdHbF9D-PPLZ</entry>要改
+      <entry name="serial">242182965420270</entry>要改
+      <entry name="asset">HKCUW-moIsYzgKe-PPLZ</entry>要改
+    </baseBoard>
+    <chassis>
+      <entry name="manufacturer">HKCUW-aE9SIQ0Xw-PPLZ</entry>要改
+      <entry name="version">HKCUW-0Q0XwqUoS-PPLZ</entry>要改
+      <entry name="serial">2XIRAC67A</entry>要改
+      <entry name="asset">HKCUW-moIsYzgKe-PPLZ</entry>要改
+      <entry name="sku">HKCUW-4y2wPlLyU-PPLZ</entry>要改
+    </chassis>
+    <oemStrings>
+      <entry>myappname:some arbitrary data</entry>
+      <entry>otherappname:more arbitrary data</entry>
+    </oemStrings>
+</sysinfo>
+    </textarea>
+    <br>
+    <button onclick="replaceMarkedLines()">Replace Marked Lines</button>
+    <br><br>
+    <textarea id="outputXml" rows="20" cols="100"></textarea>
+
+    <script>
+        function randomString(length, chars) {
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function randomStringWithFormat(original) {
+            function randomPart(part) {
+                if (/^[A-Za-z]+$/.test(part)) {
+                    return randomString(part.length, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
+                } else if (/^[0-9]+$/.test(part)) {
+                    return randomString(part.length, '0123456789');
+                } else {
+                    return part;
+                }
+            }
+
+            const parts = original.split(/(\W+)/); // Split by non-word characters
+            const newParts = parts.map(randomPart);
+            return newParts.join('');
+        }
+
+        function replaceMarkedLines() {
+            const inputXml = document.getElementById('inputXml').value;
+            const pattern = /(<entry[^>]*>)([^<]+)(<\/entry>)要改/g;
+            
+            const modifiedXml = inputXml.replace(pattern, function(match, p1, p2, p3) {
+                const newString = randomStringWithFormat(p2);
+                return p1 + newString + p3;
+            });
+
+            document.getElementById('outputXml').value = modifiedXml;
+        }
+    </script>
+</body>
+</html>
