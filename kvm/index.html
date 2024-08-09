@@ -76,7 +76,7 @@
             
             const modifiedXml = inputXml.replace(pattern, function(match, p1, p2, p3) {
                 const newString = randomStringWithFormat(p2);
-                return p1 + newString + p3 + '要改';
+                return p1 + newString + p3;
             });
 
             document.getElementById('outputXml').value = modifiedXml;
