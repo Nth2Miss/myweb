@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>XML String Replacement</title>
+    <title>XML字符串替换</title>
 </head>
 <body>
     <textarea id="inputXml" rows="20" cols="100">
@@ -38,7 +38,7 @@
 </sysinfo>
     </textarea>
     <br>
-    <button onclick="replaceMarkedLines()">Replace Marked Lines</button>
+    <button onclick="replaceMarkedLines()">替换标记部分</button>
     <br><br>
     <textarea id="outputXml" rows="20" cols="100"></textarea>
 
@@ -52,18 +52,21 @@
         }
 
         function randomStringWithFormat(original) {
-            function randomPart(part) {
+            // 将原始字符串分割成字母、数字和其他符号的部分
+            const parts = original.match(/[A-Za-z]+|[0-9]+|\W+/g);
+            if (!parts) return original; // 如果分割失败，返回原始字符串
+
+            // 对每个部分进行随机化处理
+            const newParts = parts.map(part => {
                 if (/^[A-Za-z]+$/.test(part)) {
                     return randomString(part.length, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz');
                 } else if (/^[0-9]+$/.test(part)) {
                     return randomString(part.length, '0123456789');
                 } else {
-                    return part;
+                    return part; // 保留符号部分不变
                 }
-            }
+            });
 
-            const parts = original.split(/(\W+)/); // Split by non-word characters
-            const newParts = parts.map(randomPart);
             return newParts.join('');
         }
 
